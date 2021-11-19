@@ -1,8 +1,4 @@
-﻿using MorpionGame.Services;
-using MorpionGame.Views;
-using System;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+﻿using Xamarin.Forms;
 
 namespace MorpionGame
 {
@@ -13,7 +9,6 @@ namespace MorpionGame
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
             MainPage = new AppShell();
         }
 
