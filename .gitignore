@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/solution/MorpionGame/.vs/MorpionGame/v17
+/solution/MorpionGame/MorpionGame/obj
+/solution/MorpionGame/MorpionGame/MorpionGame/bin/Debug/netstandard2.0
+/solution/MorpionGame/MorpionGame/MorpionGame/obj
+/solution/MorpionGame/MorpionGame/MorpionGame.Android/bin/Debug
+/solution/MorpionGame/MorpionGame/MorpionGame.Android/obj
+/solution/MorpionGame/MorpionGame/MorpionGame.iOS/obj
