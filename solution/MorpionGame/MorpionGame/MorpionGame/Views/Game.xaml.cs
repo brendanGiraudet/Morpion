@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿using MorpionGame.Dtos;
+using MorpionGame.Enums;
+using System;
+using System.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -9,30 +10,47 @@ namespace MorpionGame.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Game : ContentPage
     {
-        public Color PlayerColor { get; set; } = Color.Red;
-        public Color IAColor { get; set; } = Color.Blue;
-        public Color DefaultColor { get; set; } = Color.White;
-        public bool IsPlayerToGame { get; set; } = true;
-        public GameGrid GameGrid { get; set; } = new GameGrid();
+        private Color _defaultColor = Color.White;
+
+        private int _playerScore { get; set; } = 0;
+
+        private int _iAScore { get; set; } = 0;
+
+        private GameStatus _gameStatus = GameStatus.NotStarted;
+
+        private Color _playerColor = Color.Red;
+        
+        private Color _iAColor = Color.Blue;
+        
+        private bool _isPlayerToGame = true;
+
+        private GameGrid _gameGrid;
+        
         public Game()
         {
             InitializeComponent();
+            
             InitGame();
         }
 
-        private void InitGame()
+        public void InitGame()
         {
-            GameGrid.Status = GameGridStatus.InProgress;
+            _gameStatus = GameStatus.InProgress;
+
+            _playerScore = 0;
+
+            _iAScore = 0;
+
+            _gameGrid = new GameGrid(_defaultColor);
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    GameGrid.Cells.Add(new GameGridCell()
+                    _gameGrid.Cells.Add(new GameGridCell()
                     {
                         Y = i,
                         X = j,
-                        Id = $"{i}{j}",
-                        Color = DefaultColor
+                        View = grid.Children.FirstOrDefault(c => c.AutomationId == $"{i}{j}"),
                     });
                 }
             }
@@ -40,50 +58,24 @@ namespace MorpionGame.Views
 
         private void Button_Clicked(object sender, EventArgs e)
         {
+            if (_gameStatus == GameStatus.Finished) return;
+
             var button = sender as Button;
-            if (button != null && button.BackgroundColor.Equals(DefaultColor))
+            if (button != null && button.BackgroundColor.Equals(_defaultColor))
             {
                 button.BackgroundColor = GetCurrentColor();
-                UpdateCell(button.AutomationId);
-                IsPlayerToGame = !IsPlayerToGame;
+                _isPlayerToGame = !_isPlayerToGame;
             }
-        }
-
-        private void UpdateCell(string automationId)
-        {
-            var cell = GameGrid.Cells.Find(c => c.Id == automationId);
-            cell.Color = GetCurrentColor();
         }
 
         private Color GetCurrentColor()
         {
-            return IsPlayerToGame ? PlayerColor : IAColor;
+            return _isPlayerToGame ? _playerColor : _iAColor;
         }
-    }
-    public class GameGrid
-    {
-        public List<GameGridCell> Cells { get; set; } = new List<GameGridCell>();
-        public GameGridStatus Status { get; set; } = GameGridStatus.NotStarted;
-    }
-    public enum GameGridStatus
-    {
-        NotStarted,
-        InProgress,
-        Finished
-    }
-    public class GameGridCell
-    {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public Color Color { get; set; }
-        public string Id { get; set; }
 
-        public override string ToString()
+        private void ResetGrid(object sender, EventArgs e)
         {
-            return $"X : {X} "
-                + $"Y : {Y} "
-                + $"Color : {Color} "
-                + $"Id : {Id} ";
+            _gameGrid.ResetCellsToDefaultColor();
         }
     }
 }

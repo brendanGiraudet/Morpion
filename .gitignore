@@ -11,3 +11,7 @@
 /solution/MorpionGame/MorpionGame/MorpionGame.iOS/obj
 /solution/MorpionGame/MorpionGame/MorpionGame.iOS/bin/iPhoneSimulator/Debug
 /solution/MorpionGame/MorpionGame/MorpionGame.iOS/MorpionGame.iOS.csproj.user
+/solution/MorpionGame/MorpionGame/MorpionGame/bin/Release/netstandard2.0
+/solution/MorpionGame/MorpionGame/MorpionGame.Android/bin/Release
+/solution/MorpionGame/MorpionGame/MorpionGame.iOS/bin/iPhoneSimulator/Release
+/solution/MorpionGame/.vs/MorpionGame

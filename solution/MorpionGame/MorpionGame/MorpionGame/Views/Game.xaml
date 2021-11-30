@@ -2,28 +2,35 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MorpionGame.Views.Game">
-    <Grid BackgroundColor="Black" ColumnSpacing="1" RowSpacing="1">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <ScrollView>
+        <StackLayout>
+            <Grid BackgroundColor="Black" ColumnSpacing="1" RowSpacing="1" x:Name="grid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-        <Button BackgroundColor="White" Grid.Row="0" Grid.Column="0" Clicked="Button_Clicked" AutomationId="00"/>
-        <Button BackgroundColor="White" Grid.Row="0" Grid.Column="1" Clicked="Button_Clicked" AutomationId="01"/>
-        <Button BackgroundColor="White" Grid.Row="0" Grid.Column="2" Clicked="Button_Clicked" AutomationId="02"/>
+                <Button BackgroundColor="White" Grid.Row="0" Grid.Column="0" Clicked="Button_Clicked" AutomationId="00"/>
+                <Button BackgroundColor="White" Grid.Row="0" Grid.Column="1" Clicked="Button_Clicked" AutomationId="01"/>
+                <Button BackgroundColor="White" Grid.Row="0" Grid.Column="2" Clicked="Button_Clicked" AutomationId="02"/>
 
-        <Button BackgroundColor="White" Grid.Row="1" Grid.Column="0" Clicked="Button_Clicked" AutomationId="10"/>
-        <Button BackgroundColor="White" Grid.Row="1" Grid.Column="1" Clicked="Button_Clicked" AutomationId="11"/>
-        <Button BackgroundColor="White" Grid.Row="1" Grid.Column="2" Clicked="Button_Clicked" AutomationId="12"/>
+                <Button BackgroundColor="White" Grid.Row="1" Grid.Column="0" Clicked="Button_Clicked" AutomationId="10"/>
+                <Button BackgroundColor="White" Grid.Row="1" Grid.Column="1" Clicked="Button_Clicked" AutomationId="11"/>
+                <Button BackgroundColor="White" Grid.Row="1" Grid.Column="2" Clicked="Button_Clicked" AutomationId="12"/>
 
-        <Button BackgroundColor="White" Grid.Row="2" Grid.Column="0" Clicked="Button_Clicked" AutomationId="20"/>
-        <Button BackgroundColor="White" Grid.Row="2" Grid.Column="1" Clicked="Button_Clicked" AutomationId="21"/>
-        <Button BackgroundColor="White" Grid.Row="2" Grid.Column="2" Clicked="Button_Clicked" AutomationId="22"/>
+                <Button BackgroundColor="White" Grid.Row="2" Grid.Column="0" Clicked="Button_Clicked" AutomationId="20"/>
+                <Button BackgroundColor="White" Grid.Row="2" Grid.Column="1" Clicked="Button_Clicked" AutomationId="21"/>
+                <Button BackgroundColor="White" Grid.Row="2" Grid.Column="2" Clicked="Button_Clicked" AutomationId="22"/>
+            </Grid>
 
-    </Grid>
+            <Button Text="Restart" Clicked="ResetGrid"/>
+        </StackLayout>
+    </ScrollView>
+
 </ContentPage>
