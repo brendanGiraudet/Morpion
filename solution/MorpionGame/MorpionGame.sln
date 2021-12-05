@@ -7,7 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MorpionGame.Android", "Morp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MorpionGame.iOS", "MorpionGame\MorpionGame.iOS\MorpionGame.iOS.csproj", "{248B5A55-57D9-49E5-8813-6CE4457EC6DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MorpionGame", "MorpionGame\MorpionGame\MorpionGame.csproj", "{C151E314-A76A-4177-AD46-3BC3B1278FA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MorpionGame", "MorpionGame\MorpionGame\MorpionGame.csproj", "{C151E314-A76A-4177-AD46-3BC3B1278FA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{11AC37AD-EE2A-40CA-925D-F5C9B33A9D74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +75,18 @@ Global
 		{C151E314-A76A-4177-AD46-3BC3B1278FA4}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{C151E314-A76A-4177-AD46-3BC3B1278FA4}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{C151E314-A76A-4177-AD46-3BC3B1278FA4}.Release|iPhoneSimulator.Deploy.0 = Release|Any CPU
+		{11AC37AD-EE2A-40CA-925D-F5C9B33A9D74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11AC37AD-EE2A-40CA-925D-F5C9B33A9D74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11AC37AD-EE2A-40CA-925D-F5C9B33A9D74}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{11AC37AD-EE2A-40CA-925D-F5C9B33A9D74}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{11AC37AD-EE2A-40CA-925D-F5C9B33A9D74}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{11AC37AD-EE2A-40CA-925D-F5C9B33A9D74}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{11AC37AD-EE2A-40CA-925D-F5C9B33A9D74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11AC37AD-EE2A-40CA-925D-F5C9B33A9D74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11AC37AD-EE2A-40CA-925D-F5C9B33A9D74}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{11AC37AD-EE2A-40CA-925D-F5C9B33A9D74}.Release|iPhone.Build.0 = Release|Any CPU
+		{11AC37AD-EE2A-40CA-925D-F5C9B33A9D74}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{11AC37AD-EE2A-40CA-925D-F5C9B33A9D74}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
