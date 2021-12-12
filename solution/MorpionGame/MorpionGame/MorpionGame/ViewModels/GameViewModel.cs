@@ -15,9 +15,9 @@ namespace MorpionGame.ViewModels
 
         private Color _defaultColor;
 
-        private int _playerScore { get; set; } = 0;
+        public int PlayerScore { get; set; } = 0;
 
-        private int _iAScore { get; set; } = 0;
+        public int IAScore { get; set; } = 0;
 
         private GameStatus _gameStatus = GameStatus.NotStarted;
 
@@ -37,9 +37,9 @@ namespace MorpionGame.ViewModels
         {
             _gameStatus = GameStatus.InProgress;
 
-            _playerScore = 0;
+            PlayerScore = 0;
 
-            _iAScore = 0;
+            IAScore = 0;
 
             _gameGrid = new GameGrid(_defaultColor);
             for (int i = 0; i < 3; i++)
@@ -56,14 +56,63 @@ namespace MorpionGame.ViewModels
             }
         }
 
+        public void UpdateWinnerScore(Color winnerColor)
+        {
+            if (winnerColor == _playerColor)
+                PlayerScore++;
+            
+            if (winnerColor == _iAColor)
+                IAScore++;
+        }
+
         public void SwitchPlayer() => _isPlayerToGame = !_isPlayerToGame;
 
         public Color GetWinnerPlayerColor()
         {
-            if (_gameGrid.Cells[0].View.BackgroundColor == _gameGrid.Cells[1].View.BackgroundColor && _gameGrid.Cells[1].View.BackgroundColor == _gameGrid.Cells[2].View.BackgroundColor)
-                return _gameGrid.Cells[0].View.BackgroundColor;
+            if (IsWinner(_iAColor))
+                return _iAColor;
+            
+            if (IsWinner(_playerColor))
+                return _playerColor;
 
             return _defaultColor;
+        }
+        
+        public bool IsWinner(Color winnerColor)
+        {
+            // First row
+            if (_gameGrid.Cells[0].View.BackgroundColor == winnerColor && _gameGrid.Cells[0].View.BackgroundColor == _gameGrid.Cells[1].View.BackgroundColor && _gameGrid.Cells[1].View.BackgroundColor == _gameGrid.Cells[2].View.BackgroundColor)
+                return true;
+            
+            // Second row
+            if (_gameGrid.Cells[3].View.BackgroundColor == winnerColor && _gameGrid.Cells[3].View.BackgroundColor == _gameGrid.Cells[4].View.BackgroundColor && _gameGrid.Cells[4].View.BackgroundColor == _gameGrid.Cells[5].View.BackgroundColor)
+                return true;
+            
+            // Third row
+            if (_gameGrid.Cells[6].View.BackgroundColor == winnerColor && _gameGrid.Cells[6].View.BackgroundColor == _gameGrid.Cells[7].View.BackgroundColor && _gameGrid.Cells[7].View.BackgroundColor == _gameGrid.Cells[8].View.BackgroundColor)
+                return true;
+            
+            // First column
+            if (_gameGrid.Cells[0].View.BackgroundColor == winnerColor && _gameGrid.Cells[0].View.BackgroundColor == _gameGrid.Cells[3].View.BackgroundColor && _gameGrid.Cells[3].View.BackgroundColor == _gameGrid.Cells[6].View.BackgroundColor)
+                return true;
+            
+            // Second column
+            if (_gameGrid.Cells[1].View.BackgroundColor == winnerColor && _gameGrid.Cells[1].View.BackgroundColor == _gameGrid.Cells[4].View.BackgroundColor && _gameGrid.Cells[4].View.BackgroundColor == _gameGrid.Cells[7].View.BackgroundColor)
+                return true;
+            
+            // Third column
+            if (_gameGrid.Cells[2].View.BackgroundColor == winnerColor && _gameGrid.Cells[2].View.BackgroundColor == _gameGrid.Cells[5].View.BackgroundColor && _gameGrid.Cells[5].View.BackgroundColor == _gameGrid.Cells[8].View.BackgroundColor)
+                return true;
+            
+            // First diagonal
+            if (_gameGrid.Cells[0].View.BackgroundColor == winnerColor && _gameGrid.Cells[0].View.BackgroundColor == _gameGrid.Cells[4].View.BackgroundColor && _gameGrid.Cells[4].View.BackgroundColor == _gameGrid.Cells[8].View.BackgroundColor)
+                return true;
+
+            // Second diagonal
+            if (_gameGrid.Cells[2].View.BackgroundColor == winnerColor && _gameGrid.Cells[2].View.BackgroundColor == _gameGrid.Cells[4].View.BackgroundColor && _gameGrid.Cells[4].View.BackgroundColor == _gameGrid.Cells[6].View.BackgroundColor)
+                return true;
+
+            return false;
         }
 
         public Color GetCurrentColor()

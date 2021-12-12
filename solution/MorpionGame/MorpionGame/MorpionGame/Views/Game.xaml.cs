@@ -10,6 +10,16 @@ namespace MorpionGame.Views
     public partial class Game : ContentPage
     {
         private Color _defaultColor = Color.White;
+        private string _playerScoreLabelText
+        {
+            get { return "a la vie a l'amour " + _gameViewModel.PlayerScore; }
+            set { }
+        }
+        private string _iAScoreLabelText
+        {
+            get { return "Score de l'IA : " + _gameViewModel.IAScore; }
+            set { }
+        } 
 
         GameViewModel _gameViewModel;
 
@@ -31,14 +41,17 @@ namespace MorpionGame.Views
                 _gameViewModel.SwitchPlayer();
             }
 
-            if (_gameViewModel.GetWinnerPlayerColor() != _defaultColor)
+            var winnerColor = _gameViewModel.GetWinnerPlayerColor();
+            if (winnerColor != _defaultColor)
             {
+                _gameViewModel.UpdateWinnerScore(winnerColor);
                 _gameViewModel.SetStatusGame(GameStatus.Finished);
             }
         }
 
         private void ResetGrid(object sender, EventArgs e)
         {
+            _gameViewModel.SetStatusGame(GameStatus.InProgress);
             _gameViewModel.ResetGrid();
         }
     }
