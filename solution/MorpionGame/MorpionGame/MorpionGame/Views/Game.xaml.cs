@@ -19,15 +19,16 @@ namespace MorpionGame.Views
         {
             get { return "Score de l'IA : " + _gameViewModel.IAScore; }
             set { }
-        } 
+        }
 
-        GameViewModel _gameViewModel;
+        readonly GameViewModel _gameViewModel;
 
         public Game()
         {
             InitializeComponent();
             _gameViewModel = new GameViewModel(_defaultColor);
             _gameViewModel.InitGame(grid);
+            BindingContext = _gameViewModel;
         }
 
         private void Button_Clicked(object sender, EventArgs e)
@@ -39,13 +40,26 @@ namespace MorpionGame.Views
             {
                 button.BackgroundColor = _gameViewModel.GetCurrentColor();
                 _gameViewModel.SwitchPlayer();
-            }
 
-            var winnerColor = _gameViewModel.GetWinnerPlayerColor();
-            if (winnerColor != _defaultColor)
-            {
-                _gameViewModel.UpdateWinnerScore(winnerColor);
-                _gameViewModel.SetStatusGame(GameStatus.Finished);
+                var winnerColor = _gameViewModel.GetWinnerPlayerColor();
+                if (winnerColor != _defaultColor)
+                {
+                    _gameViewModel.UpdateWinnerScore(winnerColor);
+                    _gameViewModel.SetStatusGame(GameStatus.Finished);
+                }
+
+                if (!_gameViewModel.IsPlayerToGame && !_gameViewModel.IsFinishedGame())
+                {
+                    _gameViewModel.PlayIATurn();
+                    _gameViewModel.SwitchPlayer();
+
+                    winnerColor = _gameViewModel.GetWinnerPlayerColor();
+                    if (winnerColor != _defaultColor)
+                    {
+                        _gameViewModel.UpdateWinnerScore(winnerColor);
+                        _gameViewModel.SetStatusGame(GameStatus.Finished);
+                    }
+                }
             }
         }
 
@@ -53,6 +67,12 @@ namespace MorpionGame.Views
         {
             _gameViewModel.SetStatusGame(GameStatus.InProgress);
             _gameViewModel.ResetGrid();
+            
+            if(!_gameViewModel.IsPlayerToGame)
+            {
+                _gameViewModel.PlayIATurn();
+                _gameViewModel.SwitchPlayer();
+            }
         }
     }
 }

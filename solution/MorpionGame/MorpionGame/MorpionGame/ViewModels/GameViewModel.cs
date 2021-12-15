@@ -1,12 +1,12 @@
 ﻿using MorpionGame.Dtos;
 using MorpionGame.Enums;
-using System;
+using System.ComponentModel;
 using System.Linq;
 using Xamarin.Forms;
 
 namespace MorpionGame.ViewModels
 {
-    public class GameViewModel
+    public class GameViewModel : INotifyPropertyChanged
     {
         public GameViewModel(Color color)
         {
@@ -15,9 +15,29 @@ namespace MorpionGame.ViewModels
 
         private Color _defaultColor;
 
-        public int PlayerScore { get; set; } = 0;
+        public int PlayerScore
+        {
+            get => _playerScore;
+            set
+            {
+                if (_playerScore == value) return;
 
-        public int IAScore { get; set; } = 0;
+                _playerScore = value;
+                OnPropertyChanged(nameof(PlayerScore));
+            }
+        }
+        public int IAScore
+        {
+            get => _iAScore;
+            set 
+            {
+                if (_iAScore == value) return;
+
+                _iAScore = value;
+                OnPropertyChanged(nameof(IAScore));
+            }
+        }
+        public bool IsPlayerToGame { get => _isPlayerToGame; set => _isPlayerToGame = value; }
 
         private GameStatus _gameStatus = GameStatus.NotStarted;
 
@@ -28,6 +48,14 @@ namespace MorpionGame.ViewModels
         private bool _isPlayerToGame = true;
 
         private GameGrid _gameGrid;
+        private int _playerScore = 0;
+        private int _iAScore = 0;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public void SetStatusGame(GameStatus gameStatus) => _gameStatus = gameStatus;
 
@@ -56,54 +84,59 @@ namespace MorpionGame.ViewModels
             }
         }
 
+        public void PlayIATurn()
+        {
+            _gameGrid.Cells.Find(c => c.View.BackgroundColor == _defaultColor).View.BackgroundColor = _iAColor;
+        }
+
         public void UpdateWinnerScore(Color winnerColor)
         {
             if (winnerColor == _playerColor)
                 PlayerScore++;
-            
+
             if (winnerColor == _iAColor)
                 IAScore++;
         }
 
-        public void SwitchPlayer() => _isPlayerToGame = !_isPlayerToGame;
+        public void SwitchPlayer() => IsPlayerToGame = !IsPlayerToGame;
 
         public Color GetWinnerPlayerColor()
         {
             if (IsWinner(_iAColor))
                 return _iAColor;
-            
+
             if (IsWinner(_playerColor))
                 return _playerColor;
 
             return _defaultColor;
         }
-        
+
         public bool IsWinner(Color winnerColor)
         {
             // First row
             if (_gameGrid.Cells[0].View.BackgroundColor == winnerColor && _gameGrid.Cells[0].View.BackgroundColor == _gameGrid.Cells[1].View.BackgroundColor && _gameGrid.Cells[1].View.BackgroundColor == _gameGrid.Cells[2].View.BackgroundColor)
                 return true;
-            
+
             // Second row
             if (_gameGrid.Cells[3].View.BackgroundColor == winnerColor && _gameGrid.Cells[3].View.BackgroundColor == _gameGrid.Cells[4].View.BackgroundColor && _gameGrid.Cells[4].View.BackgroundColor == _gameGrid.Cells[5].View.BackgroundColor)
                 return true;
-            
+
             // Third row
             if (_gameGrid.Cells[6].View.BackgroundColor == winnerColor && _gameGrid.Cells[6].View.BackgroundColor == _gameGrid.Cells[7].View.BackgroundColor && _gameGrid.Cells[7].View.BackgroundColor == _gameGrid.Cells[8].View.BackgroundColor)
                 return true;
-            
+
             // First column
             if (_gameGrid.Cells[0].View.BackgroundColor == winnerColor && _gameGrid.Cells[0].View.BackgroundColor == _gameGrid.Cells[3].View.BackgroundColor && _gameGrid.Cells[3].View.BackgroundColor == _gameGrid.Cells[6].View.BackgroundColor)
                 return true;
-            
+
             // Second column
             if (_gameGrid.Cells[1].View.BackgroundColor == winnerColor && _gameGrid.Cells[1].View.BackgroundColor == _gameGrid.Cells[4].View.BackgroundColor && _gameGrid.Cells[4].View.BackgroundColor == _gameGrid.Cells[7].View.BackgroundColor)
                 return true;
-            
+
             // Third column
             if (_gameGrid.Cells[2].View.BackgroundColor == winnerColor && _gameGrid.Cells[2].View.BackgroundColor == _gameGrid.Cells[5].View.BackgroundColor && _gameGrid.Cells[5].View.BackgroundColor == _gameGrid.Cells[8].View.BackgroundColor)
                 return true;
-            
+
             // First diagonal
             if (_gameGrid.Cells[0].View.BackgroundColor == winnerColor && _gameGrid.Cells[0].View.BackgroundColor == _gameGrid.Cells[4].View.BackgroundColor && _gameGrid.Cells[4].View.BackgroundColor == _gameGrid.Cells[8].View.BackgroundColor)
                 return true;
@@ -117,7 +150,7 @@ namespace MorpionGame.ViewModels
 
         public Color GetCurrentColor()
         {
-            return _isPlayerToGame ? _playerColor : _iAColor;
+            return IsPlayerToGame ? _playerColor : _iAColor;
         }
 
         public void ResetGrid()
