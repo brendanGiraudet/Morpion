@@ -31,6 +31,10 @@
 
             <Label Text="{Binding PlayerScore, StringFormat='Score du joueur {0}'}" TextColor="Black" ></Label>
             <Label Text="{Binding IAScore, StringFormat='Score du joueur IA {0}'}" TextColor="Black" ></Label>
+
+            <Label Text="{Binding IADifficulty, StringFormat='Difficulté {0}'}" TextColor="Black" ></Label>
+
+            <Stepper Minimum="1" Maximum="8" Increment="1" Value="{Binding IADifficulty}" />
             
             <Button Text="Restart" Clicked="ResetGrid"/>
         </StackLayout>

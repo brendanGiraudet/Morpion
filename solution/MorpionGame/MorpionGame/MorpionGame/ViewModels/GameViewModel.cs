@@ -1,5 +1,6 @@
 ﻿using MorpionGame.Dtos;
 using MorpionGame.Enums;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Xamarin.Forms;
@@ -8,12 +9,43 @@ namespace MorpionGame.ViewModels
 {
     public class GameViewModel : INotifyPropertyChanged
     {
+        private GameStatus _gameStatus = GameStatus.NotStarted;
+
+        private Color _playerColor = Color.Red;
+
+        private Color _iAColor = Color.Blue;
+
+        private bool _isPlayerToGame = true;
+
+        private GameGrid _gameGrid;
+
+        private int _playerScore = 0;
+
+        private int _iAScore = 0;
+
+        private int _iADifficulty = 1;
+
+        private Color _defaultColor;
+
         public GameViewModel(Color color)
         {
             _defaultColor = color;
         }
 
-        private Color _defaultColor;
+        public int IADifficulty 
+        { 
+            get 
+            { 
+                return _iADifficulty; 
+            } 
+            set 
+            {
+                if (_iADifficulty == value) return;
+
+                _iADifficulty = value;
+                OnPropertyChanged(nameof(IADifficulty));
+            } 
+        }
 
         public int PlayerScore
         {
@@ -29,7 +61,7 @@ namespace MorpionGame.ViewModels
         public int IAScore
         {
             get => _iAScore;
-            set 
+            set
             {
                 if (_iAScore == value) return;
 
@@ -39,17 +71,9 @@ namespace MorpionGame.ViewModels
         }
         public bool IsPlayerToGame { get => _isPlayerToGame; set => _isPlayerToGame = value; }
 
-        private GameStatus _gameStatus = GameStatus.NotStarted;
 
-        private Color _playerColor = Color.Red;
 
-        private Color _iAColor = Color.Blue;
-
-        private bool _isPlayerToGame = true;
-
-        private GameGrid _gameGrid;
-        private int _playerScore = 0;
-        private int _iAScore = 0;
+        public GameGrid GameGrid => _gameGrid;
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
@@ -86,7 +110,75 @@ namespace MorpionGame.ViewModels
 
         public void PlayIATurn()
         {
-            _gameGrid.Cells.Find(c => c.View.BackgroundColor == _defaultColor).View.BackgroundColor = _iAColor;
+            (int heuristicValue, GameGridCell nextMoveCell) = GetBestCellToMove(_gameGrid, null, _iADifficulty, false);
+
+            if(nextMoveCell != null) _gameGrid.Cells.Find(c => c.X == nextMoveCell.X && c.Y == nextMoveCell.Y).View.BackgroundColor = _iAColor;
+        }
+
+        public (int heuristicValue, GameGridCell bestMoveCell) GetBestCellToMove(GameGrid gameGrid, GameGridCell currentCell, int depth, bool isPlayer)
+        {
+            var winner = GetWinnerPlayerColor();
+
+            if (winner == _playerColor) return (-10, currentCell);
+
+            if (winner == _iAColor) return (10, currentCell);
+
+            if (depth == 0 || !gameGrid.Cells.Any(c => c.View.BackgroundColor == _defaultColor)) return (0, currentCell);
+
+            int currentHeuristicValue = isPlayer ? 10 : -10;
+            var availableCells = gameGrid.Cells.Where(c => c.View.BackgroundColor == _defaultColor);
+            GameGridCell currentBestMoveCell = currentCell;
+            var debug = new List<string>();
+            foreach (var cell in availableCells)
+            {
+                debug.Add("*******begin*********");
+                cell.View.BackgroundColor = isPlayer ? _playerColor : _iAColor;
+                (int heuristicValue, GameGridCell nextMoveCell) = GetBestCellToMove(gameGrid, cell, depth - 1, !isPlayer);
+
+                if (currentBestMoveCell == null)
+                {
+                    currentBestMoveCell = cell;
+                }
+
+                if (isPlayer)
+                {
+                    if (currentHeuristicValue > heuristicValue)
+                    {
+                        currentHeuristicValue = heuristicValue;
+                        currentBestMoveCell = cell;
+                    }
+                }
+                else
+                {
+                    if (currentHeuristicValue < heuristicValue)
+                    {
+                        currentHeuristicValue = heuristicValue;
+                        currentBestMoveCell = cell;
+                    }
+                }
+
+                debug.Add($"currentHeuristicValue {currentHeuristicValue}");
+                debug.Add($"heuristicValue {heuristicValue}");
+                debug.Add($"currentBestMoveCell {currentBestMoveCell}");
+                debug.Add($"bestMoveCell {nextMoveCell}");
+
+                cell.View.BackgroundColor = _defaultColor;
+                debug.Add("******end**********");
+            }
+
+            //File.WriteAllLines("../test.txt", debug.ToArray());
+
+            return (currentHeuristicValue, currentBestMoveCell);
+        }
+
+        private GameGrid Clone(GameGrid gameGrid)
+        {
+            var clonedGameGrid = new GameGrid(_defaultColor);
+            foreach (var cell in gameGrid.Cells)
+            {
+                clonedGameGrid.Cells.Add(cell);
+            }
+            return clonedGameGrid;
         }
 
         public void UpdateWinnerScore(Color winnerColor)
