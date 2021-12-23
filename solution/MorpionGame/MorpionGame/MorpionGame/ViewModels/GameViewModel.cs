@@ -131,7 +131,6 @@ namespace MorpionGame.ViewModels
             var debug = new List<string>();
             foreach (var cell in availableCells)
             {
-                debug.Add("*******begin*********");
                 cell.View.BackgroundColor = isPlayer ? _playerColor : _iAColor;
                 (int heuristicValue, GameGridCell nextMoveCell) = GetBestCellToMove(gameGrid, cell, depth - 1, !isPlayer);
 
@@ -157,28 +156,10 @@ namespace MorpionGame.ViewModels
                     }
                 }
 
-                debug.Add($"currentHeuristicValue {currentHeuristicValue}");
-                debug.Add($"heuristicValue {heuristicValue}");
-                debug.Add($"currentBestMoveCell {currentBestMoveCell}");
-                debug.Add($"bestMoveCell {nextMoveCell}");
-
                 cell.View.BackgroundColor = _defaultColor;
-                debug.Add("******end**********");
             }
-
-            //File.WriteAllLines("../test.txt", debug.ToArray());
 
             return (currentHeuristicValue, currentBestMoveCell);
-        }
-
-        private GameGrid Clone(GameGrid gameGrid)
-        {
-            var clonedGameGrid = new GameGrid(_defaultColor);
-            foreach (var cell in gameGrid.Cells)
-            {
-                clonedGameGrid.Cells.Add(cell);
-            }
-            return clonedGameGrid;
         }
 
         public void UpdateWinnerScore(Color winnerColor)
